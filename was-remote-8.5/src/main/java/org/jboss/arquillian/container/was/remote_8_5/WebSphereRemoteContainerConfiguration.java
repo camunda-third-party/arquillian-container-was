@@ -67,6 +67,16 @@ public class WebSphereRemoteContainerConfiguration implements ContainerConfigura
     */
    private String deploymentClassLoaderPolicy = AppConstants.APPDEPL_CLASSLOADERPOLICY_MULTIPLE;
 
+   private String sharedLibraries = "";
+
+   public String getSharedLibraries() {
+     return sharedLibraries;
+   }
+
+   public void setSharedLibraries(String sharedLibraries) {
+     this.sharedLibraries = sharedLibraries;
+   }
+
    /**
     * @return the remoteServerAddress
     */

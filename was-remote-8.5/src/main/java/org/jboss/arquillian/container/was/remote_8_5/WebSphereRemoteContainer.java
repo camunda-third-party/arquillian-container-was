@@ -80,6 +80,17 @@ import com.ibm.websphere.management.exception.ConnectorException;
  */
 public class WebSphereRemoteContainer implements DeployableContainer<WebSphereRemoteContainerConfiguration>
 {
+
+   public String PLACEHOLDER = "PLACEHOLDER";
+   public String DEPLOYMENT_XML_TEMPLATE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+       "<appdeployment:Deployment xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" xmlns:appdeployment=\"http://www.ibm.com/websphere/appserver/schemas/5.0/appdeployment.xmi\" xmi:id=\"Deployment\">" +
+       "  <deployedObject xmi:type=\"appdeployment:ApplicationDeployment\" xmi:id=\"ApplicationDeployment\" startingWeight=\"10\" >" +
+       "    <classloader xmi:id=\"Classloader\">" +
+       "      " + PLACEHOLDER +
+       "    </classloader>" +
+       "  </deployedObject>" +
+       "</appdeployment:Deployment>";
+
    //-------------------------------------------------------------------------------------||
    // Instance Members -------------------------------------------------------------------||
    //-------------------------------------------------------------------------------------||
@@ -203,6 +214,25 @@ public class WebSphereRemoteContainer implements DeployableContainer<WebSphereRe
          deploymentArchive = (EnterpriseArchive) archive;
       } else {
          throw new DeploymentException("Unsupported archive type has been provided for deployment: " + archive.getClass().getName());
+      }
+
+      if (containerConfiguration.getSharedLibraries() != null &&
+          !containerConfiguration.getSharedLibraries().isEmpty()) {
+        // add WAS deployment descriptor for shared libraries
+        String[] sharedLibraries = containerConfiguration.getSharedLibraries().split(",");
+
+        StringBuilder sharedLibrariesToAdd = new StringBuilder();
+        for (String sharedLibrary : sharedLibraries) {
+          sharedLibrariesToAdd.append("\t<libraries libraryName=\"");
+          sharedLibrariesToAdd.append(sharedLibrary);
+          sharedLibrariesToAdd.append("\" sharedClassloader=\"true\"/>\n");
+        }
+
+        String deploymentXml = DEPLOYMENT_XML_TEMPLATE.replaceAll(PLACEHOLDER, sharedLibrariesToAdd.toString());
+        log.fine("deployment.xml: " + deploymentXml);
+
+        deploymentArchive.addAsResource(new StringAsset(deploymentXml), "ibmconfig/cells/defaultCell/applications/" +
+            "defaultApp/deployments/defaultApp/deployment.xml");
       }
 
       String appName = createDeploymentName(deploymentArchive.getName());
