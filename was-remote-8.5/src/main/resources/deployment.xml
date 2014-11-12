@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<appdeployment:Deployment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:appdeployment="http://www.ibm.com/websphere/appserver/schemas/5.0/appdeployment.xmi" xmi:id="Deployment">
-  <deployedObject xmi:type="appdeployment:ApplicationDeployment" xmi:id="ApplicationDeployment" startingWeight="10" >
-    <classloader xmi:id="Classloader">
-    	<libraries libraryName="Camunda" sharedClassloader="true"/>
-    </classloader>
-  </deployedObject>
-</appdeployment:Deployment>
