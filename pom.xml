@@ -25,11 +25,15 @@
         <!-- Versioning -->
         <version.arquillian_core>1.1.4.Final</version.arquillian_core>
 
+        <java.version>1.5</java.version>
         <!-- override from parent -->
-        <maven.compiler.argument.target>1.5</maven.compiler.argument.target>
-        <maven.compiler.argument.source>1.5</maven.compiler.argument.source>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 
-    </properties>
+        <maven.compiler.argument.source>${maven.compiler.source}</maven.compiler.argument.source>
+        <maven.compiler.argument.target>${maven.compiler.target}</maven.compiler.argument.target>
+
+   </properties>
 
     <dependencyManagement>
         <dependencies>
